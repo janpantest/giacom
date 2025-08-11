@@ -19,7 +19,7 @@ test.describe('API Testing with Playwright + TypeScript', () => {
     expect(response.status()).toBe(200);
 
     const body: { books: any[] } = await response.json();
-    // console.log(body);
+    // console.info(body);
 
     expect(Array.isArray(body.books)).toBe(true);
     expect(body.books.length).toBeGreaterThan(0);

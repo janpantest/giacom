@@ -36,17 +36,17 @@ export class DemoqaHomePage {
     }
 
     async checkResult(title: string, timeout: number): Promise<void> {
-        await expect(this.result).toBeVisible({ timeout})
+        await expect(this.result).toBeVisible({ timeout});
         await expect(this.result).toHaveText(title);
     }
 
     async goToBookDetail(nthElement: number, timeout: number): Promise<void> {
-        await expect(this.result.nth(nthElement)).toBeVisible({ timeout})
+        await expect(this.result.nth(nthElement)).toBeVisible({ timeout});
         await this.result.nth(nthElement).click();
     }
 
     async checkUrl(expectedUrl: string): Promise<void> {
-        await expect(this.page).toHaveURL(expectedUrl)
+        await expect(this.page).toHaveURL(expectedUrl);
     }
 
     async changeNumberOfRows(timeout: number): Promise<void> {

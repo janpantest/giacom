@@ -26,7 +26,7 @@ test.describe('Chained API calls - DemoQA', () => {
     });
     expect(createUserResponse.status()).toBe(201);
     const createUserBody = await createUserResponse.json();
-    console.log('Create User Response:', createUserBody);
+    // console.info('Create User Response:', createUserBody);
     userId = createUserBody.userID;
     expect(userId).toBeTruthy();
 
@@ -36,7 +36,7 @@ test.describe('Chained API calls - DemoQA', () => {
     });
     expect(tokenResponse.status()).toBe(200);
     const tokenBody = await tokenResponse.json();
-    console.log('Generate Token Response:', tokenBody);
+    // console.info('Generate Token Response:', tokenBody);
     token = tokenBody.token;
     expect(token).toBeTruthy();
 
@@ -46,7 +46,7 @@ test.describe('Chained API calls - DemoQA', () => {
     });
     expect(authResponse.status()).toBe(200);
     const authResult = await authResponse.json();
-    console.log('Authorize Response:', authResult);
+    // console.info('Authorize Response:', authResult);
 
     // Add book
     const addBookResponse = await apiContext.post('/BookStore/v1/Books', {
@@ -58,7 +58,7 @@ test.describe('Chained API calls - DemoQA', () => {
     });
     expect(addBookResponse.status()).toBe(201);
     const addBookBody = await addBookResponse.json();
-    console.log('Add Book Response:', addBookBody);
+    // console.info('Add Book Response:', addBookBody);
   });
 
   test.afterAll(async () => {
