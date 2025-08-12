@@ -26,6 +26,14 @@ export async function checkResults(page: Page, title: string, timeout: number): 
     })
 }
 
+export async function checkNumberOfRows(page: Page): Promise<void> {
+    await test.step('Check number of rows', async () => {
+        const demoqaHome = new DemoqaHomePage(page);
+
+        await demoqaHome.checkNumberOfRows();
+    })
+}
+
 export async function getBookDetail(page: Page, nthElement: number, timeout: number): Promise<void> {
     await test.step('Get book detail', async () => {
         const demoqaHome = new DemoqaHomePage(page);

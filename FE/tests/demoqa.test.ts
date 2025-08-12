@@ -9,6 +9,7 @@ test('Search for book', { tag: '@searchBook' }, async ({ page }) => {
     await demoqaSteps.checkDemoqaHome(page, url, timeout);
     await demoqaSteps.searchForBoook(page, title);
     await demoqaSteps.checkResults(page, title, timeout);
+    await demoqaSteps.checkNumberOfRows(page);
 });
 
 test('Get book\'s detail', { tag: '@getDetail' }, async ({ page }) => {

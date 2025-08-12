@@ -40,6 +40,11 @@ export class DemoqaHomePage {
         await expect(this.result).toHaveText(title);
     }
 
+    async checkNumberOfRows(): Promise<void> {
+        const numberOfRows = await this.result.all();
+        expect(numberOfRows.length).toEqual(1);
+    }
+
     async goToBookDetail(nthElement: number, timeout: number): Promise<void> {
         await expect(this.result.nth(nthElement)).toBeVisible({ timeout});
         await this.result.nth(nthElement).click();
