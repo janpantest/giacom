@@ -73,3 +73,11 @@ export async function clickPreviousButton(page: Page, titleOne: string, timeout:
         await demoqaHome.clickPreviousButton(titleOne, timeout);
     })
 }
+
+export async function getBookList(page: Page, run: 'First' | 'Second', timeout: number): Promise<void> {
+    return await test.step('Get list', async () => {
+        const demoqaHome = new DemoqaHomePage(page);
+
+        await demoqaHome.getBookList(run, timeout);
+    })
+}

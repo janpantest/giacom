@@ -22,7 +22,9 @@ test('Get book\'s detail', { tag: '@getDetail' }, async ({ page }) => {
 test('Pagination', { tag: '@pagination' }, async ({ page }) => {
     await demoqaSteps.checkDemoqaHome(page, url, timeout);
     await demoqaSteps.changeNumberOfRows(page, timeout);
+    await demoqaSteps.getBookList(page, 'First', timeout);
     const titleOne = await demoqaSteps.clickNextButton(page, timeout);
+    await demoqaSteps.getBookList(page, 'Second', timeout);
     await demoqaSteps.clickPreviousButton(page, titleOne, timeout);
 });
 

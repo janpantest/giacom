@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
+import { firstRunValues, secondRunValues } from '../helpers/constants';
 
 export class DemoqaHomePage {
     readonly page: Page;
@@ -58,7 +59,7 @@ export class DemoqaHomePage {
         await expect(this.dropdown).toBeVisible({ timeout });
         await this.dropdown.click();
         await this.dropdown.selectOption('5');
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
     }
 
     async clickNextButton(timeout: number): Promise<any> {
@@ -76,5 +77,17 @@ export class DemoqaHomePage {
         await expect(this.result.first()).toBeVisible();
         const bookTitle = await this.result.first().textContent();
         expect(bookTitle).not.toEqual(titleOne);
+    }
+
+    async getBookList(run: 'First' | 'Second', timeout: number): Promise<void> {
+        await expect(this.result.nth(2)).toBeVisible({ timeout});
+
+        const amount = await this.result.count();
+
+        for (let i = 0; i < amount ; i++) {
+            console.info(await this.result.nth(i).textContent());
+
+            (run === 'First') ? expect(await this.result.nth(i).textContent()).toEqual(firstRunValues[i]) : expect(await this.result.nth(i).textContent()).toEqual(secondRunValues[i]);
+        }
     }
 }
