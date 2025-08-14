@@ -1,11 +1,14 @@
-import { test, expect, request, APIRequestContext, APIResponse } from '@playwright/test';
+import { test, expect, request, APIRequestContext } from '@playwright/test';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 test.describe('Chained API calls - DemoQA', () => {
   let apiContext: APIRequestContext;
 
   const baseURL = 'https://demoqa.com';
-  const userName = `test_${Date.now()}`;
-  const password = '1testTEST!';
+  const userName = `${process.env.USERNAME_PREFIX}${Date.now()}`;
+  const password = process.env.PASSWORD!;
   let userId: string;
   let token: string;
 

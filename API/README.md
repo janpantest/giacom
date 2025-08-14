@@ -1,7 +1,10 @@
 ## Installation
 `npm i`
 
-## Browser Installation
+## Install .evn
+`npm install dotenv`
+
+## Browser Installation - if needed
 `npx plawright install`
 
 ## Run get request
