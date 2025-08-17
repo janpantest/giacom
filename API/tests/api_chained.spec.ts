@@ -1,5 +1,9 @@
 import { test, expect, request, APIRequestContext } from '@playwright/test';
 import dotenv from 'dotenv';
+import { payloadCreateUser } from '../payload/payloadCreateUser';
+import { payloadAddBook } from '../payload/payloadAddBook';
+import { payloadAuthorizeUser } from '../payload/payloadAuthorizeUser';
+import { payloadGenerateToken } from '../payload/payloadGenerateToken';
 
 dotenv.config();
 
@@ -25,7 +29,8 @@ test.describe('Chained API calls - DemoQA', () => {
   test('Create user -> Generate token -> Authorize -> Add book', async () => {
     // Create user
     const createUserResponse = await apiContext.post('/Account/v1/User', {
-      data: { userName, password },
+      // data: { userName, password },
+      data: payloadCreateUser(userName, password)
     });
     expect(createUserResponse.status()).toBe(201);
     const createUserBody = await createUserResponse.json();
@@ -35,7 +40,8 @@ test.describe('Chained API calls - DemoQA', () => {
 
     // Generate token
     const tokenResponse = await apiContext.post('/Account/v1/GenerateToken', {
-      data: { userName, password },
+      // data: { userName, password },
+      data: payloadGenerateToken(userName, password)
     });
     expect(tokenResponse.status()).toBe(200);
     const tokenBody = await tokenResponse.json();
@@ -45,7 +51,8 @@ test.describe('Chained API calls - DemoQA', () => {
 
     // Authorize user
     const authResponse = await apiContext.post('/Account/v1/Authorized', {
-      data: { userName, password },
+      // data: { userName, password },
+      data: payloadAuthorizeUser(userName, password)
     });
     expect(authResponse.status()).toBe(200);
     const authResult = await authResponse.json();
@@ -54,10 +61,11 @@ test.describe('Chained API calls - DemoQA', () => {
     // Add book
     const addBookResponse = await apiContext.post('/BookStore/v1/Books', {
       headers: { Authorization: `Bearer ${token}` },
-      data: {
-        userId,
-        collectionOfIsbns: [{ isbn: '9781449325862' }],
-      },
+      // data: {
+      //   userId,
+      //   collectionOfIsbns: [{ isbn: '9781449325862' }],
+      // },
+      data: payloadAddBook(userId)
     });
     expect(addBookResponse.status()).toBe(201);
     const addBookBody = await addBookResponse.json();
