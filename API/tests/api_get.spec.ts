@@ -1,11 +1,12 @@
 import { test, expect, request, APIRequestContext, APIResponse } from '@playwright/test';
+import { keys } from '../constants/keys'
 
 test.describe('API Testing with Playwright + TypeScript', () => {
   let apiContext: APIRequestContext;
   const url = 'https://demoqa.com';
 
 
-  test.beforeAll(async ({ playwright }) => {
+  test.beforeAll(async () => {
     apiContext = await request.newContext({
       baseURL: url,
       extraHTTPHeaders: {
@@ -15,7 +16,7 @@ test.describe('API Testing with Playwright + TypeScript', () => {
   });
 
   test('GET request example', async () => {
-    const response: APIResponse = await apiContext.get('/BookStore/v1/Books');
+    const response = await apiContext.get('/BookStore/v1/Books');
     expect(response.status()).toBe(200);
 
     const body: { books: any[] } = await response.json();
@@ -35,6 +36,12 @@ test.describe('API Testing with Playwright + TypeScript', () => {
       expect(typeof book.isbn).toBe('string');
       expect(typeof book.title).toBe('string');
       expect(typeof book.author).toBe('string');
+
+      keys.forEach(key => {
+        console.info(key)
+        expect(book).toHaveProperty(key);
+        expect(typeof book[key]).toBe('string');
+      });
     });
   });
 
