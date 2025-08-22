@@ -4,7 +4,7 @@ import { keys } from '../constants/keys'
 test.describe('API Testing with Playwright + TypeScript', () => {
   let apiContext: APIRequestContext;
   const url = 'https://demoqa.com';
-
+  const responseKey = 'books';
 
   test.beforeAll(async () => {
     apiContext = await request.newContext({
@@ -17,30 +17,26 @@ test.describe('API Testing with Playwright + TypeScript', () => {
 
   test('GET request example', async () => {
     const response = await apiContext.get('/BookStore/v1/Books');
+    console.info(await response.json());
     expect(response.status()).toBe(200);
 
-    const body: { books: any[] } = await response.json();
-    // console.info(body);
+    const body = await response.json();    
+    expect(body).toHaveProperty(responseKey);
+    expect(Array.isArray(body[responseKey])).toBe(true);
+    expect(body[responseKey].length).toBeGreaterThan(0);
 
-    expect(Array.isArray(body.books)).toBe(true);
-    expect(body.books.length).toBeGreaterThan(0);
-    
-    expect(body).toHaveProperty('books');
-    expect(Array.isArray(body.books)).toBe(true);
-    expect(body.books.length).toBeGreaterThan(0);
-
-    body.books.forEach(book => {
-      expect(book).toHaveProperty('isbn');
-      expect(book).toHaveProperty('title');
-      expect(book).toHaveProperty('author');
-      expect(typeof book.isbn).toBe('string');
-      expect(typeof book.title).toBe('string');
-      expect(typeof book.author).toBe('string');
+    body[responseKey].forEach((item: any) => {
+    //   expect(item).toHaveProperty('isbn');
+    //   expect(item).toHaveProperty('title');
+    //   expect(item).toHaveProperty('author');
+    //   expect(typeof item.isbn).toBe('string');
+    //   expect(typeof item.title).toBe('string');
+    //   expect(typeof item.author).toBe('string');
 
       keys.forEach(key => {
         console.info(key)
-        expect(book).toHaveProperty(key);
-        expect(typeof book[key]).toBe('string');
+        expect(item).toHaveProperty(key);
+        expect(typeof item[key]).toBe('string');
       });
     });
   });
