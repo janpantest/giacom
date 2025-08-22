@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { firstRunValues, secondRunValues } from '../helpers/constants';
+import { clickIfElementClickable, isButtonClickable } from '../helpers/helpers';
 
 export class DemoqaHomePage {
     readonly page: Page;
@@ -26,9 +27,9 @@ export class DemoqaHomePage {
         await this.page.goto(url);
     }
 
-    async checkHomePage(timeout: number): Promise<void> {
-        await expect(this.logoHome).toBeVisible({ timeout });
-        await expect(this.inputBox).toBeVisible({ timeout });
+    async checkHomePage(): Promise<void> {
+        await expect(this.logoHome).toBeVisible();
+        await expect(this.inputBox).toBeVisible();
 
     }
 
@@ -36,8 +37,8 @@ export class DemoqaHomePage {
         await this.inputBox.fill(title);
     }
 
-    async checkResult(title: string, timeout: number): Promise<void> {
-        await expect(this.result).toBeVisible({ timeout});
+    async checkResult(title: string): Promise<void> {
+        await expect(this.result).toBeVisible();
         await expect(this.result).toHaveText(title);
     }
 
@@ -46,8 +47,8 @@ export class DemoqaHomePage {
         expect(numberOfRows.length).toEqual(1);
     }
 
-    async goToBookDetail(nthElement: number, timeout: number): Promise<void> {
-        await expect(this.result.nth(nthElement)).toBeVisible({ timeout});
+    async goToBookDetail(nthElement: number): Promise<void> {
+        await expect(this.result.nth(nthElement)).toBeVisible();
         await this.result.nth(nthElement).click();
     }
 
@@ -55,37 +56,45 @@ export class DemoqaHomePage {
         await expect(this.page).toHaveURL(expectedUrl);
     }
 
-    async changeNumberOfRows(timeout: number): Promise<void> {
-        await expect(this.dropdown).toBeVisible({ timeout });
+    async changeNumberOfRows(): Promise<void> {
+        await expect(this.dropdown).toBeVisible();
         await this.dropdown.click();
         await this.dropdown.selectOption('5');
         await this.page.waitForTimeout(1000);
     }
 
-    async clickNextButton(timeout: number): Promise<any> {
-        await expect(this.buttonNext).toBeEnabled();
-        await this.buttonNext.click();
+    async clickIfEnabled(locator: 'Next'| 'Previous'): Promise<void> {
+        (locator === 'Next') ? await clickIfElementClickable(this.buttonNext) : await clickIfElementClickable(this.buttonPrevious) 
+    }
+
+    async clickIfEnabledTwo(): Promise<void> {
+        await clickIfElementClickable(this.buttonPrevious)
+    }
+
+        async clickIfEnabledThree(): Promise<void> {
+        (await isButtonClickable(this.buttonPrevious) === true) ? await this.buttonPrevious.click() : await this.buttonNext.click();
+    }
+
+    async clickNextButton(): Promise<any> {
         await this.page.waitForTimeout(2000);
         const bookTitle = await this.result.first().textContent();
         return bookTitle;
     }
 
-    async clickPreviousButton(titleOne: string, timeout: number): Promise<void> {
-        await expect(this.buttonPrevious).toBeEnabled();
-        await this.buttonPrevious.click();
+    async clickPreviousButton(titleOne: string): Promise<void> {
         await this.page.waitForTimeout(1000);
         await expect(this.result.first()).toBeVisible();
         const bookTitle = await this.result.first().textContent();
         expect(bookTitle).not.toEqual(titleOne);
     }
 
-    async getBookList(run: 'First' | 'Second', timeout: number): Promise<void> {
-        await expect(this.result.nth(2)).toBeVisible({ timeout});
+    async getBookList(run: 'First' | 'Second'): Promise<void> {
+        await expect(this.result.nth(2)).toBeVisible();
 
         const amount = await this.result.count();
 
         for (let i = 0; i < amount ; i++) {
-            console.info(await this.result.nth(i).textContent());
+            // console.info(await this.result.nth(i).textContent());
 
             (run === 'First') ? expect(await this.result.nth(i).textContent()).toEqual(firstRunValues[i]) : expect(await this.result.nth(i).textContent()).toEqual(secondRunValues[i]);
         }

@@ -4,17 +4,19 @@ import { payloadCreateUser } from '../payload/payloadCreateUser';
 import { payloadAddBook } from '../payload/payloadAddBook';
 import { payloadAuthorizeUser } from '../payload/payloadAuthorizeUser';
 import { payloadGenerateToken } from '../payload/payloadGenerateToken';
+import { chainedKey } from '../constants/keys';
 
 dotenv.config();
 
 test.describe('Chained API calls - DemoQA', () => {
   let apiContext: APIRequestContext;
 
-  const baseURL = 'https://demoqa.com';
   const userName = `${process.env.USERNAME_PREFIX}${Date.now()}`;
   const password = process.env.PASSWORD!;
+  const baseURL = process.env.BASE_URL!;
   let userId: string;
   let token: string;
+  const responseKey = 'books'
 
   test.beforeAll(async () => {
     apiContext = await request.newContext({
@@ -70,6 +72,16 @@ test.describe('Chained API calls - DemoQA', () => {
     expect(addBookResponse.status()).toBe(201);
     const addBookBody = await addBookResponse.json();
     // console.info('Add Book Response:', addBookBody);
+    expect(addBookBody).toHaveProperty(responseKey);
+    addBookBody[responseKey].forEach((item: any) => {
+      expect(item).toHaveProperty(chainedKey);
+      
+      // chainedKey.forEach(chainedKeys => {
+      //   console.info(chainedKeys)
+      //   expect(item).toHaveProperty(chainedKeys);
+      //   expect(typeof item[chainedKeys]).toBe('string');
+      // });
+    });    
   });
 
   test.afterAll(async () => {

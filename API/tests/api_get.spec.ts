@@ -1,9 +1,12 @@
 import { test, expect, request, APIRequestContext, APIResponse } from '@playwright/test';
-import { keys } from '../constants/keys'
+import { keys } from '../constants/keys';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 test.describe('API Testing with Playwright + TypeScript', () => {
   let apiContext: APIRequestContext;
-  const url = 'https://demoqa.com';
+  const url = process.env.BASE_URL!;
   const responseKey = 'books';
 
   test.beforeAll(async () => {
@@ -17,7 +20,7 @@ test.describe('API Testing with Playwright + TypeScript', () => {
 
   test('GET request example', async () => {
     const response = await apiContext.get('/BookStore/v1/Books');
-    console.info(await response.json());
+    // console.info(await response.json());
     expect(response.status()).toBe(200);
 
     const body = await response.json();    
@@ -34,7 +37,7 @@ test.describe('API Testing with Playwright + TypeScript', () => {
     //   expect(typeof item.author).toBe('string');
 
       keys.forEach(key => {
-        console.info(key)
+        // console.info(key)
         expect(item).toHaveProperty(key);
         expect(typeof item[key]).toBe('string');
       });
